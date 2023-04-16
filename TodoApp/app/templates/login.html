@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<div style="display: flex; justify-content: center; align-items: center; height: 90vh;">
+	<div style="text-align: center; margin-top: -2rem;">
+	  <h1 style="font-size: 2.5rem;">Log in</h1>
+	  <form action="{{ url_for('login') }}" method="post" style="margin-top: 1rem;">
+		{% if message is defined and message %}
+		  <div class="alert alert-warning">{{ message }}</div>
+		{% endif %}
+		<div class="form-group">
+		  <label for="username" style="font-size: 1.2rem; font-weight: bold;">Username:</label>
+		  <input type="username" class="form-control" id="username" name="username" placeholder="Enter username" style="font-size: 1.2rem; display: inline-block; vertical-align: middle;">
+		</div>
+		<div class="form-group">
+		  <label for="password" style="font-size: 1.2rem; font-weight: bold;">Password:</label>
+		  <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" style="font-size: 1.2rem; display: inline-block; vertical-align: middle;">
+		</div>    
+		<button type="submit" class="btn btn-primary" style="margin-top: 1rem; ">Login</button>
+	  </form>
+	
+	  <form action="{{ url_for('register') }}" method="get" style="margin-top: 1rem;">
+		<button class="btn btn-primary">Register</button>
+	  </form>
+	</div>
+  </div>
