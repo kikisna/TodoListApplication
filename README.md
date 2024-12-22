@@ -1,6 +1,6 @@
 ## ToDo List Application
 
-This Task Management System, built with Python (Flask) and MySQL, lets users register, log in, and manage tasks—create, edit, complete, or delete. It provides task stats like completed vs. uncompleted tasks and overdue completions. Key features include secure password hashing, session management, flash messages for feedback, and a user-friendly interface powered by Flask's HTML templates.
+This Task Management System, built with Python (Flask) and MySQL, lets users register, log in, and manage tasks—create, edit, complete, or delete. The application categorizes tasks into three lists: Pending Tasks, Completed Tasks and Uncompleted task. Key features include secure password hashing, session management, flash messages for feedback, and a user-friendly interface powered by Flask's HTML templates.
 
 ## Features
 
