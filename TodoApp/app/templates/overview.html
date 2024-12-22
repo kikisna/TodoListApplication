@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3E5879;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th, table td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .task-actions form {
+            display: inline;
+            margin-right: 10px;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .flex-item {
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .back-button {
+            text-align: center;
+        }
+
+        .back-button a {
+            text-decoration: none;
+        }
+
+        .back-button button {
+            font-size: 16px;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+
+        .back-button button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to your Task Manager, {{ session['username'] }}!</h1>
+        <h1>Stay organized and productive!!</h1>
+    </header>
+
+    <div class="container">
+        <h2>All Tasks</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Deadline</th>
+                    <th>Task Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in allTasks %}
+                    <tr>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.description }}</td>
+                        <td>{{ task.deadline }}</td>
+                        <td>{{ task.task_type }}</td>
+                        <td>{{ task.status }}</td>
+                        <td class="task-actions">
+                            {% if task.status == 'Todo' %}
+                                <form method="POST" action="/complete_task/{{ task.id }}">
+                                    <button type="submit">Mark as Done</button>
+                                </form>
+                            {% endif %}
+                            <form method="POST" action="/edit_task/{{ task.id }}">
+                                <button type="submit">Edit</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                <h3>Completed Tasks</h3>
+                {% if not completedTasks %}
+                    <p>There are no completed tasks at the moment.</p>
+                {% else %}
+                    <ul>
+                        {% for task in completedTasks %}
+                            <li>{{ task.title }} - {{ task.done_time }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <div class="flex-item">
+                <h3>Uncompleted Tasks</h3>
+                {% if not uncompletedTasks %}
+                    <p>There are no incomplete tasks at the moment.</p>
+                {% else %}
+                    <ul>
+                        {% for task in uncompletedTasks %}
+                            <li>{{ task.title }} - {{ task.deadline }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="back-button">
+            <a href="/tasks"><button>Back to Tasks</button></a>
+        </div>
+    </div>
+</body>
+</html>

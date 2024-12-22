@@ -1,232 +1,203 @@
 <!DOCTYPE html>
-<html>
-   <head>
-      <title>Main Page</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-      <style>
-         body {
-         background-color: #F8F9FA;
-         font-family: Arial, sans-serif;
-         }
-         .container {
-         margin-top: 2rem;
-         }
-         h1 {
-         text-align: center;
-         font-size: 2.5rem;
-         margin-bottom: 2rem;
-         }
-         table {
-         width: 50%;
-         border-collapse: collapse;
-         background-color: #FFFFFF;
-         box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
-         margin-bottom: 1rem;
-         }
-         th, td {
-         text-align: left;
-         padding: 1rem;
-         }
-         th {
-         background-color: #4269E1;
-         color: #FFFFFF;
-         }
-         tr:nth-child(even) {
-         background-color: #F2F2F2;
-         }
-         .scroll {
-         overflow: scroll;
-         max-height: 400px;
-         max-width: 800px;
-         }
-         .navbar {
-         background-color: rgba(17, 15, 15, 0.81);
-         width: 100%;
-         padding: 0px;
-         display: flex;
-         justify-content:flex-start;
-         }
-         .navbar-nav {
-         display: flex;
-         flex-direction: row;
-         list-style: none;
-         margin: 0;
-         padding: 0;
-         }
-         .nav-item {
-         margin: 0 10px;
-         }
-         .nav-link {
-         color: white;
-         text-decoration: none;
-         font-weight: bold;
-         padding: 10px 15px;
-         border-radius: 5px;
-         transition: background-color 0.2s ease;
-         }
-         .nav-link:hover {
-         background-color: rgba(255, 255, 255, 0.2);
-         }
-         .nav-item:last-child {
-         margin-left: auto;
-         }
-      </style>
-   </head>
-   <body>
-      <nav class="navbar">
-         <ul class="navbar-nav">
-            <li class="nav-item">
-               <a href="/tasks" class="nav-link" style="margin-left: 30px;">Tasks</a>
-            </li>
-            <li class="nav-item">
-               <a href="/analysis" class="nav-link" style="margin-left: 20px;">Analysis</a>
-            </li>
-            <li class="nav-item">
-               <a href="/logout" class="nav-link" style="margin-left: 1620px;">Logout</a>
-            </li>
-         </ul>
-      </nav>
-      <div class="container">
-         <h1>Todo-List Manager</h1>
-         <div class="container mt-5">
-            <div class="row justify-content-center">
-               <div>
-                  <h2 class="text-center mb-4">Todo List</h2>
-                  <div style="overflow: auto; max-height: 400px; ">
-                     <table class="table table-striped">
-                        <thead style="position: sticky; top: 0;">
-                           <tr>
-                              <th>Title</th>
-                              <th>Description</th>
-                              <th>Status</th>
-                              <th>Creation Time</th>
-                              <th>Deadline</th>
-                              <th>Type</th>
-                              <th>Change Attributes</th>
-                              <th></th>
-                              <th>New Deadline</th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                              <th></th>
-                           </tr>
-                        </thead>
-                        <tbody>
-                           {% for task in tasks %}
-                           <tr>
-                              <td>{{ task.title }}</td>
-                              <td>{{ task.description }}</td>
-                              <td>{{ task.status }}</td>
-                              <td>{{ task.creation_time }}</td>
-                              <td>{{ task.deadline }}</td>
-                              <td>{{ task.task_type }}</td>
-                              <form method="POST" action="{{ url_for('tasks') }}">
-                                 <td>
-                                    <input type="hidden" name="taskid" id="taskid" value="{{ task.id }}">
-                                    <input type="text" name="title_edit" id="title_edit" value="{{ task.title }}">
-                                 </td>
-                                 <td>
-                                    <input type="text" name="description_edit" id="description_edit" value="{{ task.description}}">
-                                 </td>
-                                 <td>
-                                    <input type="datetime-local" name="deadline_edit" id="deadline_edit" value="{{ task.deadline }}">
-                                 </td>
-                                 <td>
-                                    <select id="task_type_edit" name="task_type_edit">
-                                    {% for type in tasktypes %}
-                                    <option value="{{ type.type }}" {% if task.task_type == type.type %} selected {% endif %}>{{ type.type }}</option>
-                                    {% endfor %}
-                                    </select>
-                                 </td>
-                                 <td>
-                                    <button type="submit" name="save" class="btn btn-primary" style="background-color: rgb(70, 143, 33); border-color: rgb(70, 143, 33)">Save Changes</button>
-                                 </td>
-                              </form>
-                              <form method="POST" action="{{ url_for('tasks') }}">
-                                 <td>
-                                    <input type="hidden" name="del_taskid" id="del_taskid" value="{{ task.id }}">
-                                    <button type="submit" name="delete" class="btn btn-primary" style="background-color: rgb(183, 30, 30); border-color: rgb(183, 30, 30)">Delete</button>
-                                 </td>
-                              </form>
-                              <form method="POST" action="{{ url_for('tasks') }}">
-                                 <td>
-                                    <input type="hidden" name="done_taskid" id="done_taskid" value="{{ task.id }}">
-                                    <button type="submit" name="done" class="btn btn-primary">Finish Task</button>
-                                 </td>
-                              </form>
-                           </tr>
-                           {% endfor %}
-                        </tbody>
-                     </table>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="container mt-10">
-         <div class="row justify-content-center">
-            <div class="col-md-8">
-               <h2 class="text-center mb-4">Completed Tasks</h2>
-               <div style="overflow: auto; max-height: 500px;">
-                  <table class="table table-striped">
-                     <thead style="position: sticky; top: 0;">
-                        <tr>
-                           <th>Title</th>
-                           <th>Description</th>
-                           <th>Creation Time</th>
-                           <th>Deadline</th>
-                           <th>Done Time</th>
-                           <th>Type</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        {% for incomTask in incomTasks %}
-                        <tr>
-                           <td>{{ incomTask.title }}</td>
-                           <td>{{ incomTask.description }}</td>
-                           <td>{{ incomTask.creation_time }}</td>
-                           <td>{{ incomTask.deadline }}</td>
-                           <td>{{ incomTask.done_time }}</td>
-                           <td>{{ incomTask.task_type }}</td>
-                        </tr>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3E5879;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin: 5px 0 5px;
+        }
+
+        input[type="text"], input[type="date"], textarea, select {
+            width: 99%;
+            padding: 5px;
+            margin: 5px 0 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-message {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .tasks-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .tasks-container > div {
+            flex: 1;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .button-container a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to your Task Manager, {{ session['username'] }}!</h1>
+        <h1>Stay organized and productive!!</h1>
+    </header>    
+
+    <div class="container">
+        <!-- Flash message section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message">
+                        <p>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/tasks">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" required></textarea>
+
+            <label for="deadline">Deadline</label>
+            <input type="text" id="deadline" name="deadline" placeholder="dd/mm/yyyy" pattern="\d{2}/\d{2}/\d{4}" required>
+
+
+            <label for="task_type">Task Type</label>
+            <select id="task_type" name="task_type" required>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+            </select>
+
+            <button type="submit">Add Task</button>
+        </form>
+
+        <div class="tasks-container">
+            <div>
+                <h2>Pending Tasks</h2>
+                {% if tasks %}
+                    <ul>
+                        {% for task in tasks %}
+                            <li>{{ task.title }} - {{ task.description }} - {{ task.deadline }}</li>
                         {% endfor %}
-                     </tbody>
-                  </table>
-               </div>
+                    </ul>
+                {% else %}
+                    <p>No pending tasks.</p>
+                {% endif %}
             </div>
-         </div>
-      </div>
-      <div class="row mt-5 justify-content-center">
-         <div class="col-md-4">
-            <h2 class="text-center mb-4">Create New Task</h2>
-            <form action="{{ url_for('tasks') }}" method="post">
-               <div class="form-group">
-                  <label for="title">Title</label>
-                  <input type="text" class="form-control" id="title" name="title" required>
-               </div>
-               <div class="form-group">
-                  <label for="description">Description</label>
-                  <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-               </div>
-               <div class="form-group">
-                  <label for="deadline">Deadline</label>
-                  <input type="datetime-local" class="form-control" id="deadline" name="deadline" required>
-               </div>
-               <div class="form-group">
-                  <label for="type">Type</label>
-                  <select class="form-control" id="type" name="type" required>
-                     {% for type in tasktypes %}
-                     <option >{{ type.type }}</option>
-                     {% endfor %}
-                  </select>
-               </div>
-               <div class="d-flex justify-content-center">
-                  <button type="submit" class="btn btn-primary">Create Task</button>
-               </div>
-            </form>
-         </div>
-      </div>
-      </div>
-      </div>
-   </body>
+
+            <div>
+                <h2>Completed Tasks</h2>
+                {% if incomTasks %}
+                    <ul>
+                        {% for task in incomTasks %}
+                            <li>{{ task.title }} - {{ task.description }} - {{ task.done_time }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No completed tasks.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="button-container">
+            <a href="/overview"><button>Overview</button></a>
+            <a href="/logout"><button>Logout</button></a>
+        </div>
+    </div>
+</body>
+</html>
