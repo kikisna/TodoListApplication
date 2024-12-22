@@ -154,6 +154,9 @@
                             <form method="POST" action="/edit_task/{{ task.id }}">
                                 <button type="submit">Edit</button>
                             </form>
+                            <form method="POST" action="/delete_task/{{ task.id }}">
+                                <button type="submit" style="background-color: #f44336;">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

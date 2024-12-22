@@ -211,6 +211,17 @@ def edit_task(task_id):
     flash("Please log in to edit tasks!", "error")
     return redirect(url_for('login'))
 
+@app.route('/delete_task/<int:task_id>', methods=['POST'])
+def delete_task(task_id):
+    # Delete task from database
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute('DELETE FROM Task WHERE id = %s', (task_id,))
+    mysql.connection.commit()
+    cursor.close()
+
+    # Redirect back to the overview page after deletion
+    return redirect(url_for('overview'))
+
 @app.route('/overview', methods=['GET'])
 def overview():
     userid = session['userid']
